@@ -53,9 +53,7 @@ namespace api
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "api v1"));
             }
 
-          //  app.UseHttpsRedirection();
-
-          Console.WriteLine("Startup");
+            app.UseHttpsRedirection();
 
             app.UseRouting();
 
