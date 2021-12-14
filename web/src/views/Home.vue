@@ -10,8 +10,8 @@
     <div class="filter-buttons">
       <input type="radio" id="town" value="town" v-model="filter" />
       <label for="town">Gemeente</label>
-      <input type="radio" id="postalCode" value="postalCode" v-model="filter" />
-      <label for="postalCode">Postcode</label>
+      <input type="radio" id="areaCode" value="areaCode" v-model="filter" />
+      <label for="areaCode">Postcode</label>
     </div>
     <div id="content">
       <svg id="canvas" :width=width height=1000>
@@ -22,13 +22,13 @@
           <circle class="circle-overlay" :r="calculateRadius(d)">
           </circle>
           <text y=75 class="label">
-            {{this.filter == 'town' ? d.city : d.postcode}}
+            {{this.filter == 'town' ? d.city : d.areaCode}}
           </text>
         </g>
       </svg>
 
       <div v-for="(d, index) in data" :key="d">
-          <Card :show="this.selectedData == d" :x="calculateXPosition(index)" :y="calculateYPosition(index)" :title="this.filter == 'town' ? d.city : d.postcode.toString()" :content="d.amount.toString()"/>
+          <Card :show="this.selectedData == d" :x="calculateXPosition(index)" :y="calculateYPosition(index)" :title="this.filter == 'town' ? d.city : d.areaCode.toString()" :content="d.amount.toString()"/>
       </div>
     </div>
   </div>
@@ -59,13 +59,17 @@ export default {
     //Hide the card
     d3.select('.card').style("visibility", "hidden");
 
+    const resp = await fetch("http://localhost:5000/api/seatholders");
+    const json = await resp.json();
+    this.data = Array.from(json, d => {
+      return {
+        areaCode: +d.areaCode,
+        city: d.city
+      }
+    });
 
-    //Load the data
-    this.data = await d3.csv('abonnees_genk.csv', this.typeConversion);
     this.data = this.dataLoaded(this.data);
     this.data = this.prepareData(this.data);
-    //this.data.sort((a, b) => { return b.amount - a.amount} );
-
     console.log(this.data);
   },
   methods: {
@@ -73,16 +77,10 @@ export default {
     {
       this.selectedData = d;
     },
-    typeConversion: function(d) {
-      return {
-        postcode: +d.Postcode,
-        city: d.City
-      }
-    },
     dataLoaded : function(d)
     {
       const filtered = d.filter(r => {
-          return r.postcode && r.postcode > 999 && r.postcode < 10000;
+          return r.areaCode && r.areaCode > 999 && r.areaCode < 10000;
       });
       console.log(filtered);
       return filtered;
@@ -91,13 +89,13 @@ export default {
     {
       const dataMap = d3.rollup(
           data,
-          r => d3.count(r, x => x.postcode),
-          d => d.postcode
+          r => d3.count(r, x => x.areaCode),
+          d => d.areaCode
       )
 
       console.log(dataMap);
 
-      const dataArray = Array.from(dataMap, d => ({ postcode: d[0], amount: d[1], city: data.find(e => e.postcode == d[0]).city.toUpperCase() }));
+      const dataArray = Array.from(dataMap, d => ({ areaCode: d[0], amount: d[1], city: data.find(e => e.areaCode == d[0]).city.toUpperCase() }));
       const filteredDataArray = dataArray.filter(r => {
         return r.amount > 99;
       })
@@ -128,6 +126,7 @@ export default {
 .titlebox {
   display: flex;
   height: 200px;
+  margin-left: 150px;
 }
 
 #title h1 {
@@ -147,6 +146,7 @@ img {
 .filter-buttons {
   margin-top: 50px;
   margin-bottom: 20px;
+  margin-right: 150px;
   display:flex;
   justify-content: right;
 }

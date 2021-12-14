@@ -16,6 +16,7 @@ namespace api
 {
     public class Startup
     {
+        private const string corsPolicy = "_allowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -32,6 +33,13 @@ namespace api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "api", Version = "v1" });
+            });
+
+            services.AddCors(options => {
+                options.AddPolicy(name: corsPolicy,
+                    builder => {
+                        builder.WithOrigins("http://web:80", "http://localhost:8080");
+                    });
             });
         }
 
@@ -50,6 +58,8 @@ namespace api
           Console.WriteLine("Startup");
 
             app.UseRouting();
+
+            app.UseCors(corsPolicy);
 
             app.UseAuthorization();
 
