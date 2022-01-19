@@ -112,4 +112,3 @@ Client Credentials is wrong! Can't use authorization code flow (no user).
 Answer? Revoke access token from api? No. Client secret and id is open in browser.
 
 
-

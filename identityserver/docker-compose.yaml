@@ -1,0 +1,13 @@
+services:
+  identity:
+    build: .
+    ports:
+      - "5003:80"
+      - "5002:443"
+    environment:
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_HTTPS_PORT: "5002"
+    volumes:
+      - ./UserSecrets:/root/.microsoft/usersecrets
+      - ./https:/root/.aspnet/https/

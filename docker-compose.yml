@@ -7,3 +7,15 @@ services:
     build: ./web
     ports: 
       - "8080:80"
+  identity:
+    build: ./identity
+    ports:
+      - "5003:80"
+      - "5002:443"
+    environment:
+      ASPNETCORE_URLS: "https://+;http://+"
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ASPNETCORE_HTTPS_PORT: "5002"
+    volumes:
+      - ./identity/UserSecrets:/root/.microsoft/usersecrets
+      - ./identity/https:/root/.aspnet/https/
