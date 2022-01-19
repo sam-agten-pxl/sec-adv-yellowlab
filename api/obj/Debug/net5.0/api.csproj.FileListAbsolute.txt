@@ -28,3 +28,11 @@ C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\obj\Debug\
 C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\obj\Debug\net5.0\api.pdb
 C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\obj\Debug\net5.0\api.genruntimeconfig.cache
 C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\CsvHelper.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\Microsoft.IdentityModel.JsonWebTokens.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\Microsoft.IdentityModel.Logging.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\Microsoft.IdentityModel.Tokens.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\Newtonsoft.Json.dll
+C:\Users\Sam\Documents\PXL\Security Advanced\2122\Lab Yellow Team\api\bin\Debug\net5.0\System.IdentityModel.Tokens.Jwt.dll

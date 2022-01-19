@@ -59,7 +59,44 @@ export default {
     //Hide the card
     d3.select('.card').style("visibility", "hidden");
 
-    const resp = await fetch("http://localhost:5000/api/seatholders");
+
+    //Access token
+    var details = {
+      'client_id': 'dataviz',
+      'client_secret': 'sec-adv',
+      'grant_type': 'client_credentials'
+    };
+
+    var formBody = [];
+    for (var property in details) {
+      var encodedKey = encodeURIComponent(property);
+      var encodedValue = encodeURIComponent(details[property]);
+      formBody.push(encodedKey + "=" + encodedValue);
+    }
+    formBody = formBody.join("&");
+
+    let requestOptions = {
+      method: 'POST',
+      headers: { "Content-Type" : "application/x-www-form-urlencoded"},
+      body: formBody
+    }
+
+    const accessTokenResponse = await fetch('https://localhost:5002/connect/token', requestOptions)
+    const accessTokenJson = await accessTokenResponse.json();
+    const accessToken = accessTokenJson.access_token;
+    console.log(accessToken);
+
+    //Use the access token to get what we want
+    requestOptions.method = 'GET';
+    requestOptions.headers = {
+      "Content-Type" : "application/json",
+      "Authorization" : "Bearer " + accessToken
+    };
+    requestOptions.body = null;
+
+
+
+    const resp = await fetch("https://localhost:5100/api/seatholders", requestOptions);
     const json = await resp.json();
     this.data = Array.from(json, d => {
       return {
@@ -73,6 +110,7 @@ export default {
     console.log(this.data);
   },
   methods: {
+
     selectCircle: function(d)
     {
       this.selectedData = d;

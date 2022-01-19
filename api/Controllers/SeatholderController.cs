@@ -8,11 +8,13 @@ using CsvHelper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace api.Controllers
 {
     [Route("api/seatholders")]
     [ApiController]
+    [Authorize]
     public class SeatholderController : ControllerBase
     {
         //In memory db, lazy init
@@ -23,7 +25,6 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
         public List<Seatholder> Get()
         {
             if(seatholders == null)
@@ -34,14 +35,57 @@ namespace api.Controllers
             return seatholders;
         }
 
+        [Route(("{city}"))]
+        public IActionResult GetAmountOfSeatholders(string city)
+        {
+            if(seatholders == null)
+            {
+                LoadSeatHolders();
+            }
+
+            //Is this an area code?
+            try
+            {
+                int areaCode = Convert.ToInt32(city);
+                int areaCodes = seatholders.Count(x => x.AreaCode == areaCode);
+                if(areaCodes > 0)
+                {
+                    return Ok(areaCodes);
+                }
+            }
+            catch {}
+            
+
+            //Then maybe it's the name of a city?
+            int cities = seatholders.Count(x => x.City.ToLower() == city.ToLower());
+            if(cities > 0)
+            {
+                return Ok(cities);
+            }
+
+            //Out of ideas at this point
+            return NotFound();
+        }
+
         private void LoadSeatHolders()
         {
-            seatholders = new List<Seatholder>();
+            var raw = new List<RawSeatholder>();
 
             using (var reader = new StreamReader("assets/abonnees_genk.csv"))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
-                seatholders = csv.GetRecords<Seatholder>().ToList();
+                raw = csv.GetRecords<RawSeatholder>().ToList();
+            }
+
+            seatholders = new List<Seatholder>();
+            foreach(var r in raw)
+            {
+                Seatholder seat = new Seatholder();
+                seat.ConvertFromRaw(r);
+                if(seat.AreaCode > 0)
+                {
+                    seatholders.Add(seat);
+                }
             }
         }
     }
