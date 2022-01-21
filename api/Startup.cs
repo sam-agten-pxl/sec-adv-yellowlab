@@ -34,8 +34,8 @@ namespace api
             services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "https://localhost:5002";
-
+                options.Authority = "https://identity";
+                options.RequireHttpsMetadata = false;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateAudience = false
@@ -59,7 +59,9 @@ namespace api
                 options.AddPolicy(name: corsPolicy,
                     builder => {
                         builder.WithOrigins("http://web:80", "http://localhost:8080")
-                        .AllowAnyHeader();
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials();
                     });
             });
         }

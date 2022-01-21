@@ -1,3 +1,5 @@
+BEFORE: Need to accept the root.cert as trusted root ca (certs folder)
+
 CORS
 
     services.AddCors(options => {

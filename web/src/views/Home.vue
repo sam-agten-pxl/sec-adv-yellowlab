@@ -96,7 +96,7 @@ export default {
 
 
 
-    const resp = await fetch("https://localhost:5100/api/seatholders", requestOptions);
+    const resp = await fetch("https://localhost:5002/api/seatholders", requestOptions);
     const json = await resp.json();
     this.data = Array.from(json, d => {
       return {

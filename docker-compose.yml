@@ -3,12 +3,20 @@ services:
     build: ./api
     ports:
       - "5000:80"
+    volumes:
+      - ./api/certs:/root/.aspnet/https/
+      - type: bind
+        source: ./certs/root.cer
+        target: /root/.aspnet/https/root.cer
+    environment:
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "maarten-lust-geen-spruitjes"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/root/.aspnet/https/api.pfx"
   web:
     build: ./web
     ports: 
       - "8080:80"
   identity:
-    build: ./identity
+    build: ./identityserver
     ports:
       - "5003:80"
       - "5002:443"
@@ -16,6 +24,9 @@ services:
       ASPNETCORE_URLS: "https://+;http://+"
       ASPNETCORE_ENVIRONMENT: "Development"
       ASPNETCORE_HTTPS_PORT: "5002"
+      ASPNETCORE_Kestrel__Certificates__Default__Password: "maarten-lust-geen-spruitjes"
+      ASPNETCORE_Kestrel__Certificates__Default__Path: "/root/.aspnet/https/identity.pfx"
+
     volumes:
-      - ./identity/UserSecrets:/root/.microsoft/usersecrets
-      - ./identity/https:/root/.aspnet/https/
+      - ./identityserver/UserSecrets:/root/.microsoft/usersecrets
+      - ./identityserver/certs:/root/.aspnet/https/

@@ -14,5 +14,6 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0
 COPY assets/ App/assets/
 WORKDIR /App
 COPY --from=build-env /App/out .
+COPY docker-entrypoint.sh .
 EXPOSE 80
-ENTRYPOINT ["dotnet", "api.dll"]
+ENTRYPOINT ["bash", "./docker-entrypoint.sh"]
